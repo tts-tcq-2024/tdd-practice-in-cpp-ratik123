@@ -1,4 +1,4 @@
-int add()
+int add(input)
 {
     return 0;
 }
