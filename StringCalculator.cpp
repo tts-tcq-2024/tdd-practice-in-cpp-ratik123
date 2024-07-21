@@ -1,24 +1,42 @@
+#include <gtest/gtest.h>
 #include "StringCalculator.h"
-#include <sstream>
 
-// Helper function to calculate sum from tokens
-static int calculateSumFromTokens(std::stringstream& ss) {
-    std::string token;
-    int sum = 0;
+TEST(StringCalculatorAddTests, ExpectZeroForEmptyInput) {
+    int expectedresult = 0;
+    std::string input = "";
+    StringCalculator objUnderTest;
+    int result = objUnderTest.add(input);
 
-    while (std::getline(ss, token, ',')) {
-        sum += std::stoi(token);
-    }
-
-    return sum;
+    ASSERT_EQ(result, expectedresult);
 }
 
-int StringCalculator::add(const std::string& numbers) {
-    // If the input string is empty or "0", return 0
-    if (numbers.empty() || numbers == "0") {
-        return 0;
-    }
+TEST(StringCalculatorAddTests, ExpectZeroForSingleZero) {
+    int expectedresult = 0;
+    std::string input = "0";
+    StringCalculator objUnderTest;
+    int result = objUnderTest.add(input);
 
-    std::stringstream ss(numbers);
-    return calculateSumFromTokens(ss);
+    ASSERT_EQ(result, expectedresult);
+}
+
+TEST(StringCalculatorAddTests, ExpectSumForTwoNumbers) {
+    int expectedresult = 3;
+    std::string input = "1,2";
+    StringCalculator objUnderTest;
+    int result = objUnderTest.add(input);
+
+    ASSERT_EQ(result, expectedresult);
+}
+
+TEST(StringCalculatorAddTests, ExpectExceptionForNegativeNumbers) {
+    ASSERT_THROW({
+        std::string input = "-1,2";
+        StringCalculator objUnderTest;
+        objUnderTest.add(input);
+    }, std::runtime_error);
+}
+
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
