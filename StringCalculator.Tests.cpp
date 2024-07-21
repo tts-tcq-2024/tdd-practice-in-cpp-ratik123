@@ -37,14 +37,14 @@ TEST(StringCalculatorAddTests, ExpectExceptionForNegativeNumbers) {
         }, std::runtime_error);
 }
 
-// TEST(StringCalculatorAddTests, ExpectSumWithNewlineDelimiter) {
-//     int expectedresult = 6;
-//     std::string input = "1\n2,3";
-//      StringCalculator objUnderTest;
-//     int result =objUnderTest.add(input);
+TEST(StringCalculatorAddTests, ExpectSumWithNewlineDelimiter) {
+    int expectedresult = 6;
+    std::string input = "1\n2,3";
+     StringCalculator objUnderTest;
+    int result =objUnderTest.add(input);
 
-//     ASSERT_EQ(result, expectedresult);
-// }
+    ASSERT_EQ(result, expectedresult);
+}
 
 // TEST(StringCalculatorAddTests, IgnoreNumbersGreaterThan1000) {
 //     int expectedresult = 1;
