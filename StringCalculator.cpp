@@ -1,13 +1,8 @@
 #include "StringCalculator.h"
 #include <sstream>
 
-int StringCalculator::add(const std::string& numbers) {
-    // If the input string is empty or "0", return 0
-    if (numbers.empty() || numbers == "0") {
-        return 0;
-    }
-
-    std::stringstream ss(numbers);
+// Helper function to calculate sum from tokens
+static int calculateSumFromTokens(std::stringstream& ss) {
     std::string token;
     int sum = 0;
 
@@ -18,4 +13,12 @@ int StringCalculator::add(const std::string& numbers) {
     return sum;
 }
 
+int StringCalculator::add(const std::string& numbers) {
+    // If the input string is empty or "0", return 0
+    if (numbers.empty() || numbers == "0") {
+        return 0;
+    }
 
+    std::stringstream ss(numbers);
+    return calculateSumFromTokens(ss);
+}
