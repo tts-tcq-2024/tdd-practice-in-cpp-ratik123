@@ -3,11 +3,13 @@
 #include <vector>
 #include <regex>
 
-// Helper function to split the input string into tokens and check for negatives
-static std::vector<int> tokenizeAndCheckForNegatives(const std::string& numbers) {
+static const int UPPER_LIMIT = 1000;
+
+// Helper function to split the input string into tokens, check for negatives and filter out numbers greater than 1000
+static std::vector<int> tokenizeAndFilter(const std::string& numbers) {
     // Replace newlines with commas for consistent delimiter processing
     std::string modifiedNumbers = std::regex_replace(numbers, std::regex("[\n]"), ",");
-    
+
     std::stringstream ss(modifiedNumbers);
     std::string token;
     std::vector<int> tokens;
@@ -17,7 +19,9 @@ static std::vector<int> tokenizeAndCheckForNegatives(const std::string& numbers)
         if (num < 0) {
             throw std::runtime_error("Negative numbers not allowed: " + token);
         }
-        tokens.push_back(num);
+        if (num <= UPPER_LIMIT) {
+            tokens.push_back(num);
+        }
     }
 
     return tokens;
@@ -37,6 +41,6 @@ int StringCalculator::add(const std::string& numbers) {
         return 0;
     }
 
-    std::vector<int> tokens = tokenizeAndCheckForNegatives(numbers);
+    std::vector<int> tokens = tokenizeAndFilter(numbers);
     return calculateSum(tokens);
 }
