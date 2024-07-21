@@ -1,42 +1,38 @@
-#include <gtest/gtest.h>
 #include "StringCalculator.h"
+#include <sstream>
+#include <vector>
 
-TEST(StringCalculatorAddTests, ExpectZeroForEmptyInput) {
-    int expectedresult = 0;
-    std::string input = "";
-    StringCalculator objUnderTest;
-    int result = objUnderTest.add(input);
+// Helper function to split the input string into tokens and check for negatives
+static std::vector<int> tokenizeAndCheckForNegatives(const std::string& numbers) {
+    std::stringstream ss(numbers);
+    std::string token;
+    std::vector<int> tokens;
 
-    ASSERT_EQ(result, expectedresult);
+    while (std::getline(ss, token, ',')) {
+        int num = std::stoi(token);
+        if (num < 0) {
+            throw std::runtime_error("Negative numbers not allowed: " + token);
+        }
+        tokens.push_back(num);
+    }
+
+    return tokens;
 }
 
-TEST(StringCalculatorAddTests, ExpectZeroForSingleZero) {
-    int expectedresult = 0;
-    std::string input = "0";
-    StringCalculator objUnderTest;
-    int result = objUnderTest.add(input);
-
-    ASSERT_EQ(result, expectedresult);
+// Helper function to calculate the sum of integers
+static int calculateSum(const std::vector<int>& tokens) {
+    int sum = 0;
+    for (int num : tokens) {
+        sum += num;
+    }
+    return sum;
 }
 
-TEST(StringCalculatorAddTests, ExpectSumForTwoNumbers) {
-    int expectedresult = 3;
-    std::string input = "1,2";
-    StringCalculator objUnderTest;
-    int result = objUnderTest.add(input);
+int StringCalculator::add(const std::string& numbers) {
+    if (numbers.empty() || numbers == "0") {
+        return 0;
+    }
 
-    ASSERT_EQ(result, expectedresult);
-}
-
-TEST(StringCalculatorAddTests, ExpectExceptionForNegativeNumbers) {
-    ASSERT_THROW({
-        std::string input = "-1,2";
-        StringCalculator objUnderTest;
-        objUnderTest.add(input);
-    }, std::runtime_error);
-}
-
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+    std::vector<int> tokens = tokenizeAndCheckForNegatives(numbers);
+    return calculateSum(tokens);
 }
