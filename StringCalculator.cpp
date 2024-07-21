@@ -1,10 +1,14 @@
 #include "StringCalculator.h"
 #include <sstream>
 #include <vector>
+#include <regex>
 
 // Helper function to split the input string into tokens and check for negatives
 static std::vector<int> tokenizeAndCheckForNegatives(const std::string& numbers) {
-    std::stringstream ss(numbers);
+    // Replace newlines with commas for consistent delimiter processing
+    std::string modifiedNumbers = std::regex_replace(numbers, std::regex("[\n]"), ",");
+    
+    std::stringstream ss(modifiedNumbers);
     std::string token;
     std::vector<int> tokens;
 
