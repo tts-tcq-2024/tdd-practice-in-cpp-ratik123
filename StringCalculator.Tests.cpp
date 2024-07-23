@@ -55,11 +55,11 @@ TEST(StringCalculatorAddTests, IgnoreNumbersGreaterThan1000) {
     ASSERT_EQ(result, expectedresult);
 }
 
-// TEST(StringCalculatorAddTests, ExpectSumWithCustomDelimiter) {
-//     int expectedresult = 3;
-//     std::string input = "//;\n1;2";
-//     StringCalculator objUnderTest;
-//     int result = objUnderTest.add(input);
+TEST(StringCalculatorAddTests, ExpectSumWithCustomDelimiter) {
+    int expectedresult = 3;
+    std::string input = "//;\n1;2";
+    StringCalculator objUnderTest;
+    int result = objUnderTest.add(input);
 
-//     ASSERT_EQ(result, expectedresult);
-// }
+    ASSERT_EQ(result, expectedresult);
+}
