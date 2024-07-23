@@ -3,34 +3,56 @@
 #include <vector>
 #include <regex>
 
-static const int UPPER_LIMIT = 1000;
+// Helper function to replace newlines with commas
+static std::string replaceNewlinesWithCommas(const std::string& numbers) {
+    return std::regex_replace(numbers, std::regex("[\n]"), ",");
+}
 
-// Helper function to split the input string into tokens, check for negatives and filter out numbers greater than 1000
-static std::vector<int> tokenizeAndFilter(const std::string& numbers) {
-    // Replace newlines with commas for consistent delimiter processing
-    std::string modifiedNumbers = std::regex_replace(numbers, std::regex("[\n]"), ",");
-
-    std::stringstream ss(modifiedNumbers);
+// Helper function to split the input string into tokens
+static std::vector<std::string> splitString(const std::string& str, char delimiter) {
+    std::stringstream ss(str);
     std::string token;
-    std::vector<int> tokens;
+    std::vector<std::string> tokens;
 
-    while (std::getline(ss, token, ',')) {
-        int num = std::stoi(token);
-        if (num < 0) {
-            throw std::runtime_error("Negative numbers not allowed: " + token);
-        }
-        if (num <= UPPER_LIMIT) {
-            tokens.push_back(num);
-        }
+    while (std::getline(ss, token, delimiter)) {
+        tokens.push_back(token);
     }
 
     return tokens;
 }
 
+// Helper function to convert tokens to integers and check for negatives
+static std::vector<int> convertTokensToIntegers(const std::vector<std::string>& tokens) {
+    std::vector<int> integers;
+
+    for (const std::string& token : tokens) {
+        int num = std::stoi(token);
+        if (num < 0) {
+            throw std::runtime_error("Negative numbers not allowed: " + token);
+        }
+        integers.push_back(num);
+    }
+
+    return integers;
+}
+
+// Helper function to filter out numbers greater than the upper limit
+static std::vector<int> filterNumbers(const std::vector<int>& numbers, int upperLimit) {
+    std::vector<int> filteredNumbers;
+
+    for (int num : numbers) {
+        if (num <= upperLimit) {
+            filteredNumbers.push_back(num);
+        }
+    }
+
+    return filteredNumbers;
+}
+
 // Helper function to calculate the sum of integers
-static int calculateSum(const std::vector<int>& tokens) {
+static int calculateSum(const std::vector<int>& numbers) {
     int sum = 0;
-    for (int num : tokens) {
+    for (int num : numbers) {
         sum += num;
     }
     return sum;
@@ -41,6 +63,10 @@ int StringCalculator::add(const std::string& numbers) {
         return 0;
     }
 
-    std::vector<int> tokens = tokenizeAndFilter(numbers);
-    return calculateSum(tokens);
+    std::string modifiedNumbers = replaceNewlinesWithCommas(numbers);
+    std::vector<std::string> tokens = splitString(modifiedNumbers, ',');
+    std::vector<int> integers = convertTokensToIntegers(tokens);
+    std::vector<int> filteredIntegers = filterNumbers(integers, 1000);
+
+    return calculateSum(filteredIntegers);
 }
